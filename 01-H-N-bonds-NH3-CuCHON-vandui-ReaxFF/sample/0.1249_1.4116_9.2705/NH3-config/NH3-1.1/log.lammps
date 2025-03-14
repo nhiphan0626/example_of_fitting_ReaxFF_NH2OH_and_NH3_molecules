@@ -1,0 +1,34 @@
+LAMMPS (29 Aug 2024 - Update 1)
+units           real
+atom_style      full
+#atom_modify	map hash
+boundary        p p p
+neighbor	2.5 bin
+read_data       data_lammps
+Reading data file ...
+  orthogonal box = (0 0 0) to (25 25 25)
+  1 by 1 by 1 MPI processor grid
+WARNING: Atom style in data file atomic differs from currently defined atom style full (../read_data.cpp:706)
+  reading atoms ...
+  4 atoms
+Finding 1-2 1-3 1-4 neighbors ...
+  special bond factors lj:    0        0        0       
+  special bond factors coul:  0        0        0       
+     0 = max # of 1-2 neighbors
+     0 = max # of 1-3 neighbors
+     0 = max # of 1-4 neighbors
+     1 = max # of special neighbors
+  special bonds CPU = 0.000 seconds
+  read_data CPU = 0.003 seconds
+timestep        1.0
+
+#bond_style	harmonic
+#angle_style 	harmonic
+pair_style      reaxff  NULL checkqeq yes
+pair_coeff      * * ffield.Reaxff   H N
+
+
+fix             1 all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff
+#compute        pqeq all pair coul/pqeqgauss
+compute         reax all pair reaxff
+log             qeq.eng
