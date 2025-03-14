@@ -1,0 +1,23 @@
+units           real
+atom_style      full
+#atom_modify	map hash
+boundary        p p p
+neighbor	2.0 bin
+read_data       data_lammps
+timestep        0.25
+
+#bond_style	harmonic
+#angle_style 	harmonic
+pair_style      reaxff  NULL 
+pair_coeff      * * ffield.Reaxff   H N O
+
+
+fix             1 all qeq/reaxff 1 0.0 10.0 1.0e-6 reaxff
+#compute        pqeq all pair coul/pqeqgauss
+compute         reax all pair reaxff
+log             qeq.eng
+thermo          1
+dump            1 all custom 1 qeq.lammps id type xu yu zu  q
+thermo_style    custom step etotal pe ke ecoul
+#unfix		1
+run             0
